@@ -6,10 +6,12 @@ class ReviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    return AspectRatio(
-      aspectRatio: 25 / 9,
+    return SizedBox(
+      // width: mediaQuery.size.width - 50,
+
+      height: 120,
       child: Card(
-        margin: EdgeInsets.only(bottom: 20),
+        margin: EdgeInsets.only(bottom: 20, right: 10),
         color: Colors.grey[100],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),

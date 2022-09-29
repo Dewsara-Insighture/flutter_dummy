@@ -144,7 +144,8 @@ class HomeScreen extends StatelessWidget {
                       closedElevation: 0,
                       openColor: Colors.transparent,
                       transitionType: ContainerTransitionType.fade,
-                      transitionDuration: const Duration(seconds: 1),
+                      transitionDuration:
+                          const Duration(seconds: 1, milliseconds: 30),
                       openBuilder: (context, _) =>
                           UserDetailScreen(userDet: val),
                       closedBuilder: (context, VoidCallback openContainer) =>

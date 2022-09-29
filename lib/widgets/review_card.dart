@@ -7,9 +7,8 @@ class ReviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     return SizedBox(
-      // width: mediaQuery.size.width - 50,
-
-      height: 120,
+      width: mediaQuery.size.width - 50,
+      // height: 120,
       child: Card(
         margin: EdgeInsets.only(bottom: 20, right: 10),
         color: Colors.grey[100],

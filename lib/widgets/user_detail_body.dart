@@ -10,15 +10,15 @@ class UserDetailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView(children: [
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30), topLeft: Radius.circular(30))),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
+      child: Container(
+        margin: const EdgeInsets.only(top: 20),
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30), topLeft: Radius.circular(30))),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -162,20 +162,22 @@ class UserDetailBody extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 15),
-                ReviewCard(),
-                ReviewCard(),
-                ReviewCard(),
-                ReviewCard(),
-                // ListView.builder(
-                //     itemCount: 4,
-                //     itemBuilder: (context, index) {
-                //       return const ReviewCard();
-                //     })
+                SizedBox(
+                  height: 120,
+                  child: ListView.builder(
+                      physics: const ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                        return const ReviewCard();
+                      }),
+                )
               ],
             ),
           ),
         ),
-      ]),
+      ),
     );
   }
 }

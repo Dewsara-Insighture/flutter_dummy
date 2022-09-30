@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'dart:math';
 
-class UserDetailBackground extends StatelessWidget {
+class UserDetailHeader extends StatelessWidget {
   final User user;
-  const UserDetailBackground({super.key, required this.user});
+  const UserDetailHeader({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {

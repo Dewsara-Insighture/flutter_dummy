@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/user.dart';
-import 'package:flutter_application_1/widgets/user_detail_background.dart';
-import 'package:flutter_application_1/widgets/user_detail_body.dart';
+import '../models/user.dart';
+import '../widgets/landscape/user_detail_body_lm.dart';
+import '../widgets/landscape/user_detail_header_lm.dart';
+import '../widgets/user_detail_header.dart';
+import '../widgets/user_detail_body.dart';
 import 'dart:math';
 
 class UserDetailScreen extends StatelessWidget {
@@ -26,11 +28,24 @@ class UserDetailScreen extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Column(
-          children: [
-            UserDetailBackground(user: userDet),
-            UserDetailBody(user: userDet),
-          ],
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            if (orientation == Orientation.portrait) {
+              return Column(
+                children: [
+                  UserDetailHeader(user: userDet),
+                  UserDetailBody(user: userDet),
+                ],
+              );
+            } else {
+              return Column(
+                children: [
+                  UserDetailHeaderLandscape(user: userDet),
+                  UserDetailBodyLandscape(user: userDet),
+                ],
+              );
+            }
+          },
         ),
       ),
     );

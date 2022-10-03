@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/user.dart';
+import 'package:flutter_application_1/widgets/add_review_popup.dart';
 import 'package:flutter_application_1/widgets/review_card.dart';
 import 'package:flutter_application_1/widgets/stat_card.dart';
+import 'package:like_button/like_button.dart';
 
-class UserDetailBody extends StatelessWidget {
+class UserDetailBody extends StatefulWidget {
   final User user;
   const UserDetailBody({super.key, required this.user});
 
   @override
+  State<UserDetailBody> createState() => _UserDetailBodyState();
+}
+
+class _UserDetailBodyState extends State<UserDetailBody> {
+  bool isLiked = false;
+  var favCount = 2;
+
+  @override
   Widget build(BuildContext context) {
+    // Future<bool> onLikeButtonTapped(bool isLiked) async {
+    //   favCount += isLiked ? 1 : -1;
+    //   setState(() => {favCount += 1});
+
+    //   return !isLiked;
+    // }
+
     return Expanded(
       child: Container(
         margin: const EdgeInsets.only(top: 20),
@@ -22,13 +39,29 @@ class UserDetailBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'Profile Details',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: [
+                    const Text(
+                      'Profile Details',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    LikeButton(
+                      isLiked: isLiked,
+                      onTap: (isLiked) async {
+                        this.isLiked = !isLiked;
+                        setState(() {
+                          favCount += this.isLiked ? 1 : -1;
+                        });
+                        return !isLiked;
+                      },
+                    )
+                  ],
                 ),
                 const SizedBox(height: 10),
                 Padding(
@@ -45,7 +78,7 @@ class UserDetailBody extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        user.email,
+                        widget.user.email,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -62,7 +95,7 @@ class UserDetailBody extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        user.teamName,
+                        widget.user.teamName,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -79,7 +112,7 @@ class UserDetailBody extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        user.contactNo,
+                        widget.user.contactNo,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -110,7 +143,12 @@ class UserDetailBody extends StatelessWidget {
                         ),
                         child: InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, '/home');
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AddReviewPopup();
+                                });
+                            // Navigator.pushNamed(context, '/home');
                           },
                           child: const Padding(
                             padding: EdgeInsets.all(5.0),
@@ -130,6 +168,52 @@ class UserDetailBody extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
+                      //     child: Card(
+                      //   color: Colors.red[200],
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(20.0),
+                      //   ),
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(12.0),
+                      //     child: Column(
+                      //       children: [
+                      //         LikeButton(
+                      //           size: 25,
+                      //           countPostion: CountPostion.bottom,
+                      //           likeCount: favCount,
+                      //           likeCountPadding: const EdgeInsets.all(0),
+                      //           likeBuilder: (isLiked) {
+                      //             return Icon(
+                      //               Icons.favorite_rounded,
+                      //               color: isLiked
+                      //                   ? Colors.red[700]
+                      //                   : Colors.red[400],
+                      //               size: 25,
+                      //             );
+                      //           },
+                      //           countBuilder: (likeCount, isLiked, text) {
+                      //             return (Text(
+                      //               '$favCount',
+                      //               style: const TextStyle(
+                      //                   color: Colors.white,
+                      //                   overflow: TextOverflow.ellipsis,
+                      //                   fontSize: 15,
+                      //                   fontWeight: FontWeight.bold),
+                      //             ));
+                      //           },
+                      //         ),
+                      //         const Text(
+                      //           'Favourite',
+                      //           style: TextStyle(
+                      //               color: Colors.white,
+                      //               overflow: TextOverflow.ellipsis,
+                      //               fontSize: 12,
+                      //               fontWeight: FontWeight.bold),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // )
                       child: StatusCard(
                           cardText: "Favourite",
                           cardColor: (Colors.red[200])!,
@@ -137,7 +221,7 @@ class UserDetailBody extends StatelessWidget {
                             Icons.favorite_rounded,
                             color: Colors.red[700],
                           )),
-                          count: '2'),
+                          count: favCount),
                     ),
                     Expanded(
                       child: StatusCard(
@@ -147,7 +231,7 @@ class UserDetailBody extends StatelessWidget {
                             Icons.rate_review_rounded,
                             color: Colors.blue[700],
                           )),
-                          count: '2'),
+                          count: 2),
                     ),
                     Expanded(
                       child: StatusCard(
@@ -157,7 +241,7 @@ class UserDetailBody extends StatelessWidget {
                             Icons.star_rate_rounded,
                             color: (Colors.orange[700]),
                           )),
-                          count: '2'),
+                          count: 2),
                     ),
                   ],
                 ),

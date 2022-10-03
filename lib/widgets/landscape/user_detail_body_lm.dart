@@ -69,7 +69,7 @@ class UserDetailBodyLandscape extends StatelessWidget {
                             Icons.favorite_rounded,
                             color: Colors.red[700],
                           )),
-                          count: '2'),
+                          count: 2),
                     ),
                     Expanded(
                       child: StatusCard(
@@ -79,7 +79,7 @@ class UserDetailBodyLandscape extends StatelessWidget {
                             Icons.rate_review_rounded,
                             color: Colors.blue[700],
                           )),
-                          count: '2'),
+                          count: 2),
                     ),
                     Expanded(
                       child: StatusCard(
@@ -89,7 +89,7 @@ class UserDetailBodyLandscape extends StatelessWidget {
                             Icons.star_rate_rounded,
                             color: (Colors.orange[700]),
                           )),
-                          count: '2'),
+                          count: 2),
                     ),
                   ],
                 ),

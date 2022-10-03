@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class StatusCard extends StatelessWidget {
   final Color cardColor;
   final Icon cardIcon;
-  final String count;
+  final int count;
   final String cardText;
   const StatusCard(
       {super.key,
@@ -25,6 +25,14 @@ class StatusCard extends StatelessWidget {
           children: [
             cardIcon,
             Text(
+              '$count',
+              style: const TextStyle(
+                  color: Colors.white,
+                  overflow: TextOverflow.ellipsis,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+            ),
+            Text(
               cardText,
               style: const TextStyle(
                   color: Colors.white,
@@ -32,18 +40,9 @@ class StatusCard extends StatelessWidget {
                   fontSize: 12,
                   fontWeight: FontWeight.bold),
             ),
-            Text(
-              count,
-              style: const TextStyle(
-                  color: Colors.white,
-                  overflow: TextOverflow.ellipsis,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-            ),
           ],
         ),
       ),
     );
-    ;
   }
 }

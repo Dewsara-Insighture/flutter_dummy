@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/user.dart';
-import 'dart:math';
 
 class UserDetailHeader extends StatelessWidget {
   final User user;
@@ -45,14 +44,42 @@ class UserDetailHeader extends StatelessWidget {
                     CircleAvatar(
                       radius: 50,
                       backgroundColor: Colors.white.withOpacity(0.5),
-                      child: CircleAvatar(
-                        radius: 45,
-                        backgroundColor: Colors.white.withOpacity(0.6),
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage(user.avatarImg),
-                          radius: 40,
+                      child: Stack(children: [
+                        CircleAvatar(
+                          radius: 45,
+                          backgroundColor: Colors.white.withOpacity(0.6),
+                          child: CircleAvatar(
+                            backgroundImage: AssetImage(user.avatarImg),
+                            radius: 40,
+                          ),
                         ),
-                      ),
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(90.0),
+                                color: Colors.white.withOpacity(0.8)),
+                            child: Row(children: [
+                              Icon(
+                                Icons.star_rate_rounded,
+                                size: 14,
+                                color: Colors.amber[900],
+                              ),
+                              Text(
+                                '4.5',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.amber[700],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ]),
+                          ),
+                        ),
+                      ]),
                     ),
                     Text(
                       user.name,

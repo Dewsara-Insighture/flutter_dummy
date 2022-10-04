@@ -7,9 +7,14 @@ import 'dart:convert';
 import '../models/user.dart';
 import '../widgets/user_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   //  var jsonObj = {
   List<User> lUsers = [
     User(
@@ -78,86 +83,125 @@ class HomeScreen extends StatelessWidget {
     ),
   ];
 
+  List<User> filteredUsers = [];
+
+  @override
+  void initState() {
+    filteredUsers = lUsers;
+    super.initState();
+  }
+
+  void filterUserList(String keyword) {
+    List<User> result = [];
+
+    if (keyword.isEmpty) {
+      result = lUsers;
+    } else {
+      result = lUsers
+          .where(
+              (user) => user.name.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      filteredUsers = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: ListView(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.only(bottom: 10),
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Welcome\nHanna!',
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              'Know your Employees Better.',
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Welcome\nHanna!',
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Know your Employees Better.',
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 1,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: CircleAvatar(
+                        radius: 35,
+                        backgroundColor: Colors.grey[400]?.withOpacity(0.5),
                         child: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.grey[400]?.withOpacity(0.5),
-                          child: CircleAvatar(
-                            radius: 32.5,
-                            backgroundColor: Colors.grey[400]?.withOpacity(0.6),
-                            child: const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("asset/images/female_user_1.jpg"),
-                              radius: 30,
-                            ),
+                          radius: 32.5,
+                          backgroundColor: Colors.grey[400]?.withOpacity(0.6),
+                          child: const CircleAvatar(
+                            backgroundImage:
+                                AssetImage("asset/images/female_user_1.jpg"),
+                            radius: 30,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  const Search(),
-                  const Text(
-                    "Employee List",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  for (var val in lUsers)
-                    OpenContainer(
-                      closedColor: Colors.transparent,
-                      closedElevation: 0,
-                      openColor: Colors.transparent,
-                      transitionType: ContainerTransitionType.fade,
-                      transitionDuration:
-                          const Duration(seconds: 1, milliseconds: 30),
-                      openBuilder: (context, _) =>
-                          UserDetailScreen(userDet: val),
-                      closedBuilder: (context, VoidCallback openContainer) =>
-                          UserCard(
-                        user: val,
-                        onClicked: openContainer,
-                      ),
                     ),
-                ],
-              ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+                  child: TextField(
+                    onChanged: (value) => filterUserList(value),
+                    cursorColor: Colors.black,
+                    style: const TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.zero,
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      hintText: 'Search by Name',
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(50)),
+                    ),
+                  ),
+                ),
+                const Text(
+                  "Employee List",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                for (var val in filteredUsers)
+                  OpenContainer(
+                    closedColor: Colors.transparent,
+                    closedElevation: 0,
+                    openColor: Colors.transparent,
+                    transitionType: ContainerTransitionType.fade,
+                    transitionDuration:
+                        const Duration(seconds: 1, milliseconds: 30),
+                    openBuilder: (context, _) => UserDetailScreen(userDet: val),
+                    closedBuilder: (context, VoidCallback openContainer) =>
+                        UserCard(
+                      user: val,
+                      onClicked: openContainer,
+                    ),
+                  ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

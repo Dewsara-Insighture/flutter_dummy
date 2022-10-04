@@ -75,6 +75,7 @@ flutter:
     - asset/images/male_user_3.png
     - asset/images/female_user_1.jpg
     - asset/images/female_user_2.jpg
+    - asset/images/logo.png
 
     - asset/icons/linkedin.png
     - asset/icons/linkedin_white.png

@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 
 class LoginBackground extends StatefulWidget {
-  final String textTop;
-
-  final String textBottom;
-
   const LoginBackground({
     super.key,
-    required this.textTop,
-    required this.textBottom,
   });
 
   @override

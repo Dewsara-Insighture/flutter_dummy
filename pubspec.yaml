@@ -41,6 +41,7 @@ dependencies:
   flutter_linkify: ^5.0.2
   like_button: ^2.0.5
   flutter_rating_bar: ^4.0.1
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
@@ -66,19 +67,21 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - asset/images/background1.jpg
-    - asset/images/ninja1.jpg
-    - asset/images/ninja2.jpg
-    - asset/images/review2.png
-    - asset/images/male_user_1.jpg
-    - asset/images/male_user_2.png
-    - asset/images/male_user_3.png
-    - asset/images/female_user_1.jpg
-    - asset/images/female_user_2.jpg
-    - asset/images/logo.png
+    # - asset/images/background1.jpg
+    # - asset/images/ninja1.jpg
+    # - asset/images/ninja2.jpg
+    # - asset/images/review2.png
+    # - asset/images/male_user_1.jpg
+    # - asset/images/male_user_2.png
+    # - asset/images/male_user_3.png
+    # - asset/images/female_user_1.jpg
+    # - asset/images/female_user_2.jpg
+    # - asset/images/logo.png
 
-    - asset/icons/linkedin.png
-    - asset/icons/linkedin_white.png
+    # - asset/icons/linkedin.png
+    # - asset/icons/linkedin_white.png
+    - asset/images/
+    - asset/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -98,6 +101,10 @@ flutter:
     - family: Poppins
       fonts:
         - asset: asset/fonts/Poppins-Regular.ttf
+    - family: Mulish
+      fonts:
+        - asset: asset/fonts/Mulish-Light.ttf
+        - asset: asset/fonts/Mulish-SemiBold.ttf
 
   #
   # For details regarding fonts from package dependencies,

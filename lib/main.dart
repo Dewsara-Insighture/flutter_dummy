@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/main_screen.dart';
+import 'package:flutter_application_1/screens/onboarding_screen.dart';
 // import 'package:flutter_application_1/widgets/ninja_home.dart';
-import "screens/login_screen.dart";
+import "./screens/login_screen.dart";
 
 //Importing the model calsses.
 import "quote.dart";
@@ -17,6 +18,7 @@ void main() {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
+        '/onboarding': (context) => const OnboardingScreen(),
         '/home': (context) => const MainScreen(),
       },
     ),

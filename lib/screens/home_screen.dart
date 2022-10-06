@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter_application_1/screens/user_detail_screen.dart';
+import 'package:flutter_application_1/services/api_service.dart';
 import 'package:flutter_application_1/widgets/search_widget.dart';
-import 'dart:convert';
 
 import '../models/user.dart';
 import '../widgets/user_card.dart';
@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   //  var jsonObj = {
-  List<User> lUsers = [
+  final List<User> _lUsers = [
     User(
       name: 'Alex Wasabi',
       position: "Senior Software Engineer",
@@ -83,11 +83,32 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
-  List<User> filteredUsers = [];
+  late List<User> _filteredUsers = [];
+
+  late List<User>? _apiUsers = [];
+  var isLoaded = false;
+
+  void _getData() async {
+    _apiUsers = (await ApiService().getUsers());
+    if (_apiUsers != null) {
+      print(_apiUsers);
+      setState(() {
+        _filteredUsers = _apiUsers!;
+      });
+    } else {
+      print('broke');
+    }
+    // Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+  }
 
   @override
   void initState() {
-    filteredUsers = lUsers;
+    // _filteredUsers = _lUsers;
+    // filteredUsers = _getData();
+    if (_filteredUsers.isEmpty) {
+      _getData();
+    }
+
     super.initState();
   }
 
@@ -95,16 +116,16 @@ class _HomeScreenState extends State<HomeScreen> {
     List<User> result = [];
 
     if (keyword.isEmpty) {
-      result = lUsers;
+      result = _apiUsers!;
     } else {
-      result = lUsers
+      result = _apiUsers!
           .where(
               (user) => user.name.toLowerCase().contains(keyword.toLowerCase()))
           .toList();
     }
 
     setState(() {
-      filteredUsers = result;
+      _filteredUsers = result;
     });
   }
 
@@ -184,21 +205,57 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Employee List",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                for (var val in filteredUsers)
-                  OpenContainer(
-                    closedColor: Colors.transparent,
-                    closedElevation: 0,
-                    openColor: Colors.transparent,
-                    transitionType: ContainerTransitionType.fade,
-                    transitionDuration:
-                        const Duration(seconds: 1, milliseconds: 30),
-                    openBuilder: (context, _) => UserDetailScreen(userDet: val),
-                    closedBuilder: (context, VoidCallback openContainer) =>
-                        UserCard(
-                      user: val,
-                      onClicked: openContainer,
-                    ),
-                  ),
+                _filteredUsers.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 80),
+                        child: Center(
+                          child: Transform.scale(
+                            scale: 1.8,
+                            child: const CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.grey)),
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _filteredUsers.length,
+                        itemBuilder: ((context, index) {
+                          return OpenContainer(
+                            closedColor: Colors.transparent,
+                            closedElevation: 0,
+                            openColor: Colors.transparent,
+                            transitionType: ContainerTransitionType.fade,
+                            transitionDuration:
+                                const Duration(seconds: 1, milliseconds: 30),
+                            openBuilder: (context, _) => UserDetailScreen(
+                                userDet: _filteredUsers[index]),
+                            closedBuilder:
+                                (context, VoidCallback openContainer) =>
+                                    UserCard(
+                              user: _filteredUsers[index],
+                              onClicked: openContainer,
+                            ),
+                          );
+                        }),
+                      )
+
+                // for (var val in _filteredUsers)
+                //   OpenContainer(
+                //     closedColor: Colors.transparent,
+                //     closedElevation: 0,
+                //     openColor: Colors.transparent,
+                //     transitionType: ContainerTransitionType.fade,
+                //     transitionDuration:
+                //         const Duration(seconds: 1, milliseconds: 30),
+                //     openBuilder: (context, _) => UserDetailScreen(userDet: val),
+                //     closedBuilder: (context, VoidCallback openContainer) =>
+                //         UserCard(
+                //       user: val,
+                //       onClicked: openContainer,
+                //     ),
+                //   ),
               ],
             ),
           ),

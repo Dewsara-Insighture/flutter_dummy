@@ -15,8 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const LoginBackground(
-              textTop: "Hello World", textBottom: "this is great"),
+          const LoginBackground(),
           const SizedBox(height: 60),
           SizedBox(
             width: 300.0,
@@ -29,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 side: const BorderSide(color: Color(0xFF0077B6), width: 3),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/home');
+                Navigator.pushNamed(context, '/onboarding');
               },
               icon: const ImageIcon(
                 AssetImage("asset/icons/linkedin.png"),

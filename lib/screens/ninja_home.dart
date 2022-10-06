@@ -99,6 +99,7 @@ class _NinjaHomeState extends State<NinjaHome> {
           ],
         ),
       ),
+      // for (var val in _filteredUsers)
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() => {ratingVal += 2});

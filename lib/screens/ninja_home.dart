@@ -99,7 +99,22 @@ class _NinjaHomeState extends State<NinjaHome> {
           ],
         ),
       ),
+
       // for (var val in _filteredUsers)
+      //   OpenContainer(
+      //     closedColor: Colors.transparent,
+      //     closedElevation: 0,
+      //     openColor: Colors.transparent,
+      //     transitionType: ContainerTransitionType.fade,
+      //     transitionDuration:
+      //         const Duration(seconds: 1, milliseconds: 30),
+      //     openBuilder: (context, _) => UserDetailScreen(userDet: val),
+      //     closedBuilder: (context, VoidCallback openContainer) =>
+      //         UserCard(
+      //       user: val,
+      //       onClicked: openContainer,
+      //     ),
+      //   ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() => {ratingVal += 2});

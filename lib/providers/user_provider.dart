@@ -18,7 +18,6 @@ class UserProvider extends ChangeNotifier {
 
   void changeSearchString(String searchString) {
     _searchString = searchString;
-    print(_searchString);
     notifyListeners();
   }
 
@@ -32,5 +31,15 @@ class UserProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> refreshUsers() async {
+    isLoading = true;
+    notifyListeners();
+
+    final response = await _service.refreshUsers();
+    _userl = response!;
+    isLoading = false;
+    notifyListeners();
   }
 }

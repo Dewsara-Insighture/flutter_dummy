@@ -14,7 +14,29 @@ class ApiService {
       //print('Response:- ${json["employee"]}');
 
       if (response.statusCode == 200) {
-        print('success');
+        print('Initial data success');
+        List<User> userList = userFromJson(jsonEncode(json["employee"]));
+
+        return userList;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<List<User>?> refreshUsers() async {
+    try {
+      var client = http.Client();
+
+      var url = Uri.parse('http://10.0.2.2:4003/refresh');
+      final response = await http.get(url);
+      var json = jsonDecode(response.body);
+      //print('Response:- ${json["employee"]}');
+
+      if (response.statusCode == 200) {
+        print('Refresh success');
         List<User> userList = userFromJson(jsonEncode(json["employee"]));
 
         return userList;

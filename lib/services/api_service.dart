@@ -8,14 +8,18 @@ class ApiService {
     try {
       var client = http.Client();
 
-      var url = Uri.parse('http://192.168.1.4:4003/employees');
+      var url = Uri.parse('http://10.0.2.2:4003/employees');
       final response = await http.get(url);
       var json = jsonDecode(response.body);
       //print('Response:- ${json["employee"]}');
 
       if (response.statusCode == 200) {
         print('success');
-        return userFromJson(jsonEncode(json["employee"]));
+        List<User> userList = userFromJson(jsonEncode(json["employee"]));
+
+        return userList;
+      } else {
+        return [];
       }
     } catch (e) {
       print(e);

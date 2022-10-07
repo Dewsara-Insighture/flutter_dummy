@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/providers/user_provider.dart';
 import 'package:flutter_application_1/screens/main_screen.dart';
 import 'package:flutter_application_1/screens/onboarding_screen.dart';
+import 'package:provider/provider.dart';
 // import 'package:flutter_application_1/widgets/ninja_home.dart';
 import "./screens/login_screen.dart";
 
@@ -10,17 +12,20 @@ import 'widgets/quote_card.dart';
 
 void main() {
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Poppins",
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: "Poppins",
+        ),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const LoginScreen(),
+          '/onboarding': (context) => const OnboardingScreen(),
+          '/home': (context) => const MainScreen(),
+        },
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const LoginScreen(),
-        '/onboarding': (context) => const OnboardingScreen(),
-        '/home': (context) => const MainScreen(),
-      },
     ),
   );
 }

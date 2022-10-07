@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:flutter_application_1/providers/user_provider.dart';
 import 'package:flutter_application_1/screens/user_detail_screen.dart';
 import 'package:flutter_application_1/services/api_service.dart';
 import 'package:flutter_application_1/widgets/search_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../models/user.dart';
 import '../widgets/user_card.dart';
@@ -15,7 +17,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //  var jsonObj = {
+// need for future builder
+  // late Future<List<User>?> _userList;
+
   final List<User> _lUsers = [
     User(
       name: 'Alex Wasabi',
@@ -82,11 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
       contactNo: '0957302863',
     ),
   ];
-
   late List<User> _filteredUsers = [];
-
   late List<User>? _apiUsers = [];
-  var isLoaded = false;
+
+  late Future<List<User>?> _userList;
+
+  String searchString = "";
 
   void _getData() async {
     _apiUsers = (await ApiService().getUsers());
@@ -103,11 +108,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // _filteredUsers = _lUsers;
-    // filteredUsers = _getData();
-    if (_filteredUsers.isEmpty) {
-      _getData();
-    }
+    //Correctly working
+    // if (_filteredUsers.isEmpty) {
+    //   _getData();
+    // }
+
+    //State Check with Provider  Seems we do not need to use this. But still keep.
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<UserProvider>(context, listen: false).getAllUsers();
+    });
 
     super.initState();
   }
@@ -125,8 +134,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     setState(() {
+      searchString = keyword;
       _filteredUsers = result;
     });
+  }
+
+  Future refresh() async {
+    // Provider.of<UserProvider>(context).refreshUsers();
   }
 
   @override
@@ -186,7 +200,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 15.0, bottom: 15),
                   child: TextField(
-                    onChanged: (value) => filterUserList(value),
+                    onChanged: (value) {
+                      Provider.of<UserProvider>(context, listen: false)
+                          .changeSearchString(value);
+                      // filterUserList(value);
+                    },
                     cursorColor: Colors.black,
                     style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
@@ -205,8 +223,86 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Employee List",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                _filteredUsers.isEmpty
-                    ? Padding(
+                // Future builder is best to use when we do not have a search and only data will be displayed. Because the list is captured using snapshot.data
+                // FutureBuilder(
+                //   future: _userList,
+                //   builder:
+                //       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                //     print(snapshot.data);
+                //     if (snapshot.hasData) {
+                //       return ListView.builder(
+                //         shrinkWrap: true,
+                //         physics: const NeverScrollableScrollPhysics(),
+                //         itemCount: snapshot.data.length,
+                //         itemBuilder: ((context, index) {
+                //           return OpenContainer(
+                //             closedColor: Colors.transparent,
+                //             closedElevation: 0,
+                //             openColor: Colors.transparent,
+                //             transitionType: ContainerTransitionType.fade,
+                //             transitionDuration:
+                //                 const Duration(seconds: 1, milliseconds: 30),
+                //             openBuilder: (context, _) => UserDetailScreen(
+                //                 userDet: snapshot.data?[index]),
+                //             closedBuilder:
+                //                 (context, VoidCallback openContainer) =>
+                //                     UserCard(
+                //               user: snapshot.data?[index],
+                //               onClicked: openContainer,
+                //             ),
+                //           );
+                //         }),
+                //       );
+                //     } else if (snapshot.hasError) {
+                //       return Text('Some Error Occured');
+                //     }
+                //     return CircularProgressIndicator();
+                //   },
+                // )
+
+                //Correctly Working.
+                // _filteredUsers.isEmpty
+                // ? Padding(
+                //     padding: const EdgeInsets.only(top: 80),
+                //     child: Center(
+                //       child: Transform.scale(
+                //         scale: 1.8,
+                //         child: const CircularProgressIndicator(
+                //             valueColor:
+                //                 AlwaysStoppedAnimation<Color>(Colors.grey)),
+                //       ),
+                //     ),
+                //   )
+                // : ListView.builder(
+                //     shrinkWrap: true,
+                //     physics: const NeverScrollableScrollPhysics(),
+                //     itemCount: _filteredUsers.length,
+                //     itemBuilder: ((context, index) {
+                //       return OpenContainer(
+                //         closedColor: Colors.transparent,
+                //         closedElevation: 0,
+                //         openColor: Colors.transparent,
+                //         transitionType: ContainerTransitionType.fade,
+                //         transitionDuration:
+                //             const Duration(seconds: 1, milliseconds: 30),
+                //         openBuilder: (context, _) => UserDetailScreen(
+                //             userDet: _filteredUsers[index]),
+                //         closedBuilder:
+                //             (context, VoidCallback openContainer) =>
+                //                 UserCard(
+                //           user: _filteredUsers[index],
+                //           onClicked: openContainer,
+                //         ),
+                //       );
+                //     }),
+                //   )
+
+                Consumer<UserProvider>(
+                  builder: (context, value, child) {
+                    print(value.filUserList);
+                    final users = value.filUserList;
+                    if (value.isLoading) {
+                      return Padding(
                         padding: const EdgeInsets.only(top: 80),
                         child: Center(
                           child: Transform.scale(
@@ -216,46 +312,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                     AlwaysStoppedAnimation<Color>(Colors.grey)),
                           ),
                         ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _filteredUsers.length,
-                        itemBuilder: ((context, index) {
-                          return OpenContainer(
-                            closedColor: Colors.transparent,
-                            closedElevation: 0,
-                            openColor: Colors.transparent,
-                            transitionType: ContainerTransitionType.fade,
-                            transitionDuration:
-                                const Duration(seconds: 1, milliseconds: 30),
-                            openBuilder: (context, _) => UserDetailScreen(
-                                userDet: _filteredUsers[index]),
-                            closedBuilder:
-                                (context, VoidCallback openContainer) =>
-                                    UserCard(
-                              user: _filteredUsers[index],
-                              onClicked: openContainer,
-                            ),
-                          );
-                        }),
-                      )
-
-                // for (var val in _filteredUsers)
-                //   OpenContainer(
-                //     closedColor: Colors.transparent,
-                //     closedElevation: 0,
-                //     openColor: Colors.transparent,
-                //     transitionType: ContainerTransitionType.fade,
-                //     transitionDuration:
-                //         const Duration(seconds: 1, milliseconds: 30),
-                //     openBuilder: (context, _) => UserDetailScreen(userDet: val),
-                //     closedBuilder: (context, VoidCallback openContainer) =>
-                //         UserCard(
-                //       user: val,
-                //       onClicked: openContainer,
-                //     ),
-                //   ),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: users.length,
+                      itemBuilder: ((context, index) {
+                        return OpenContainer(
+                          closedColor: Colors.transparent,
+                          closedElevation: 0,
+                          openColor: Colors.transparent,
+                          transitionType: ContainerTransitionType.fade,
+                          transitionDuration:
+                              const Duration(seconds: 1, milliseconds: 30),
+                          openBuilder: (context, _) =>
+                              UserDetailScreen(userDet: users.elementAt(index)),
+                          closedBuilder:
+                              (context, VoidCallback openContainer) => UserCard(
+                            user: users.elementAt(index),
+                            onClicked: openContainer,
+                          ),
+                        );
+                      }),
+                    );
+                  },
+                )
               ],
             ),
           ),

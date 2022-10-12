@@ -1,11 +1,32 @@
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+import '../providers/user_provider.dart';
+
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late Auth0 auth0;
+
+  @override
+  void initState() {
+    // auth0 = Auth0("wvu-dev.au.auth0.com", "COaGVMvNEx17hmd2Fi6Ies0cHvqYoOg1");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    UserProfile userDet =
+        Provider.of<UserProvider>(context, listen: false).usrPrf;
+
+    print("User:- ${userDet.profileUrl}");
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -32,9 +53,9 @@ class ProfileScreen extends StatelessWidget {
               height: 30,
             ),
             const Text('Username'),
-            const Text(
-              'Hannah Elanie',
-              style: TextStyle(
+            Text(
+              "${userDet.name}",
+              style: const TextStyle(
                 fontSize: 16,
               ),
             ),
@@ -46,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
               onOpen: (link) {
                 print("Linkify link = ${link.url}");
               },
-              text: "https://www.linkedin.com/in/conve-halo-8a8b33251/",
+              text: "${userDet.profileUrl}",
               style: const TextStyle(
                 fontSize: 16,
               ),
@@ -55,9 +76,9 @@ class ProfileScreen extends StatelessWidget {
               height: 15,
             ),
             const Text('Phone'),
-            const Text(
-              '+94716548236',
-              style: TextStyle(
+            Text(
+              '${userDet.phoneNumber}',
+              style: const TextStyle(
                 fontSize: 16,
               ),
             ),
@@ -85,7 +106,8 @@ class ProfileScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    await auth0.webAuthentication(scheme: 'https').logout();
                     Navigator.pushNamedAndRemoveUntil(
                         context, '/', (route) => false);
                   },

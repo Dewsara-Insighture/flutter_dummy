@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "968504035165",
+    "project_id": "wvu-test-2",
+    "storage_bucket": "wvu-test-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968504035165:android:b10c88bd28b7b777440ab4",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968504035165-n5bbq92uj0pfbhlt1q1n0fa3asp4pthm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuw5_IaDoF1rnTK8B5FjkpVBqdKPyvu3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968504035165-n5bbq92uj0pfbhlt1q1n0fa3asp4pthm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
